@@ -53,6 +53,7 @@ const RIGHT_PATH = "/Volumes/GLV80RHBOOT";
 
 let leftConnected = false;
 let rightConnected = false;
+const maxRetries = 30;
 
 let count = 0;
 while (!leftConnected || !rightConnected) {
@@ -77,7 +78,7 @@ while (!leftConnected || !rightConnected) {
   }
 
   if (!leftConnected || !rightConnected) {
-    if (count === 10) {
+    if (count === maxRetries) {
       process.exit(1);
     }
 
@@ -86,10 +87,7 @@ while (!leftConnected || !rightConnected) {
 }
 
 try {
-  copyFileSync(
-    mostRecentFile.fullPath,
-    path.join(LEFT_PATH, mostRecentFile.fileName)
-  );
+  copyFileSync(mostRecentFile.fullPath, path.join(LEFT_PATH, mostRecentFile.fileName));
   console.log("✅ Flashed firmware to left");
 } catch (error) {
   console.error("Error copying file to left");
@@ -98,10 +96,7 @@ try {
 }
 
 try {
-  copyFileSync(
-    mostRecentFile.fullPath,
-    path.join(RIGHT_PATH, mostRecentFile.fileName)
-  );
+  copyFileSync(mostRecentFile.fullPath, path.join(RIGHT_PATH, mostRecentFile.fileName));
   console.log("✅ Flashed firmware to right");
 } catch (error) {
   console.error("Error copying file to right");
